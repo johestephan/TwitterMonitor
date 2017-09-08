@@ -22,7 +22,7 @@ infile.close()
 
 outfile = open("Leaktweets.txt","a")
 
-keywords = ["ibm.com","abnamro.com","euroclear.com","yahoo.com"]
+keywords = ["yahoo.com"]
 
 message = ""
 for item in api.GetListTimeline(MYTRconfig.TimeID):
