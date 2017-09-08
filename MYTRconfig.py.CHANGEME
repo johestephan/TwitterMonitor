@@ -1,0 +1,13 @@
+#Twitter data
+consumer_key=''
+consumer_secret=''
+access_token_key=''
+access_token_secret=''
+
+# The ID of the Twitter list
+TimeID=""
+
+# Email data
+email=""
+email_password=""
+email_server="smtp.gmail.com:587"
