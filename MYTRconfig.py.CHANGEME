@@ -11,3 +11,6 @@ TimeID=""
 email=""
 email_password=""
 email_server="smtp.gmail.com:587"
+
+# please add some domains to the keywords list
+keywords=["example.com"]
