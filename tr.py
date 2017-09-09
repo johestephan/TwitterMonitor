@@ -22,9 +22,10 @@ infile.close()
 
 outfile = open("Leaktweets.txt","a")
 
-keywords = ["yahoo.com"]
+keywords = MYTRconfig.keywords
 
 message = ""
+print("Starting looking for: %s" % ",".join(keywords))
 for item in api.GetListTimeline(MYTRconfig.TimeID):
         try:
                 newD = json.loads(str(item))
@@ -49,13 +50,11 @@ for item in api.GetListTimeline(MYTRconfig.TimeID):
 
                         for word in keywords:
                                 Findings = set()
-                                reg1 = re.compile(r"[a-zA-Z0-9\+\._-]+\@([a-zA-Z0-9-]+\.|\.|)%s" % word)
+                                reg1 = re.compile("([a-zA-Z0-9\+\._-]+\@([a-zA-Z0-9-]+\.|\.|)%s)" % word)
                                 for item in reg1.findall(pp1.lower()):
-                                    print(item)
                                     Findings.add(item)
                                 print(len(Findings))
                                 if len(Findings) > 0:   
-                                    print("Found: %s" % ",".join(Findings))
                                     logmessage = '''TwitterBot found %s (sum: %s) in %s (ID: %s)\n''' % (word, len(Findings), d1,d3)
                                     syslog.syslog(logmessage)
                                     print(logmessage)
@@ -68,7 +67,6 @@ for item in api.GetListTimeline(MYTRconfig.TimeID):
                 print(e.__doc__)
                 print(e.message)
 outfile.close()
-print(len(message))
 if len(message) > 10:
         print(message)
         sendmail.send(message)
