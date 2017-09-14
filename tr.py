@@ -55,7 +55,7 @@ for item in api.GetListTimeline(MYTRconfig.TimeID):
                                     Findings.add(item)
                                 print(len(Findings))
                                 if len(Findings) > 0:   
-                                    logmessage = '''TwitterBot|FoundDomain: %s|NumberofFindings: %s|SourceURL: %s |SourceTwitterID: %s)''' % (word, len(Findings), d1,d3)
+                                    logmessage = '''TwitterBot|FoundDomain: %s|NumberofFindings: %s|SourceURL: %s |SourceTwitterID: %s''' % (word, len(Findings), d1,d3)
                                     syslog.syslog(logmessage)
                                     print(logmessage)
 
