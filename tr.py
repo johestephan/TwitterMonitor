@@ -23,6 +23,9 @@ infile.close()
 outfile = open("Leaktweets.txt","a")
 
 keywords = MYTRconfig.keywords
+alarmwords = MYTRconfig.alarmwords
+buzzwords = MYTRconfig.buzzwords
+
 
 message = ""
 print("Starting looking for: %s" % ",".join(keywords))
@@ -53,12 +56,33 @@ for item in api.GetListTimeline(MYTRconfig.TimeID):
                                 reg1 = re.compile("([a-zA-Z0-9\+\._-]+\@([a-zA-Z0-9-]+\.|\.|)%s)" % word)
                                 for item in reg1.findall(pp1.lower()):
                                     Findings.add(item)
-                                print(len(Findings))
+                                #print(len(Findings))
                                 if len(Findings) > 0:   
                                     logmessage = '''TwitterBot|FoundDomain: %s|NumberofFindings: %s|SourceURL: %s |SourceTwitterID: %s''' % (word, len(Findings), d1,d3)
                                     syslog.syslog(logmessage)
                                     print(logmessage)
+                                    message += logmessage + "\n"
 
+                        for word in alarmwords:
+                                Findings = set()
+                                if word in pp1.lower():
+                                    logmessage = '''TwitterBot|FoundAlarmword: %s |SourceURL: %s |SourceTwitterID: %s''' % (word, d1,d3) 
+                                    syslog.syslog(logmessage)
+                                    print(logmessage)
+                                    message += logmessage + "\n"
+
+
+                        for name,regex in buzzwords.items():
+                                Findings = set()
+                                reg1 = re.compile(regex)
+                                for item in reg1.findall(pp1):
+                                    Findings.add(item)
+                                #print(len(Findings))
+                                if len(Findings) > 0:
+                                    logmessage = '''TwitterBot|FoundBuzz: %s|NumberofFindings: %s|SourceURL: %s |SourceTwitterID: %s''' % (name, len(Findings), d1,d3)
+                                    syslog.syslog(logmessage)
+                                    print(logmessage)
+                                    message += logmessage + "\n"
                 else:
                         print("Old one %s" % d3)
               
@@ -68,6 +92,5 @@ for item in api.GetListTimeline(MYTRconfig.TimeID):
                 print(e.message)
 outfile.close()
 if len(message) > 10:
-        print(message)
         sendmail.send(message)
 
